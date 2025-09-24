@@ -10,6 +10,9 @@ Player::Player(){
 }
 
 void Player::setTargetPosition(Vector2 newPosition){
+    if (newPosition.x == -1){
+        return;
+    }
     if(Vector2Distance(targetPosition, newPosition) > movementTreshold ){
         targetPosition = newPosition;
         isMoving = true;
