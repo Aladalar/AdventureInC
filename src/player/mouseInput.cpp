@@ -3,6 +3,8 @@
 MouseInput::MouseInput(){
 }
 
+Image collisionMap = LoadImage("assets/data/collision/test-collision.png");
+
 Vector2 MouseInput::GetValidPosition(Vector2 mousePosition){
     if (isWalkable(mousePosition)){
         return mousePosition;
@@ -11,6 +13,5 @@ Vector2 MouseInput::GetValidPosition(Vector2 mousePosition){
 }
 
 bool MouseInput::isWalkable(Vector2 pos) {
-    // White rectangle from (0,400) to (800,600)
-    return (pos.x >= 0 && pos.x <= 800 && pos.y >= 400 && pos.y <= 600);
+    return ColorIsEqual(GetImageColor(collisionMap, pos.x, pos.y), WHITE);
 }

@@ -8,6 +8,13 @@ add_executable(${PROJECT_NAME}
     src/core/logger.cpp
     src/player/mouseInput.cpp
     src/player/player.cpp
+    src/player/navigation.cpp
+)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/assets 
+    $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets
 )
 
 if(WIN32)
@@ -20,6 +27,8 @@ if(WIN32)
         winmm
         gdi32
         opengl32
+        msvcrt      
+        ucrt
     )
 elseif(UNIX)
     target_include_directories(${PROJECT_NAME} PRIVATE 
