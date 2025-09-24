@@ -30,6 +30,7 @@
 *.lai
 *.la
 *.a
+!libs/*/raylib/lib/*.a
 
 # Executables
 *.exe

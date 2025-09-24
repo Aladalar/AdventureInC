@@ -1,5 +1,6 @@
 #include <iostream>
-#include "logger.h"
+#include <logger.h>
+#include <player.h>
 #include "raylib.h"
 
 int main(int argc, char *argv[]){
@@ -9,10 +10,18 @@ int main(int argc, char *argv[]){
     
     Logger::info("Window initialized");
     
+    Player player;
+    
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(DARKBLUE);
-        DrawText("Hello Raylib!", 10, 10, 20, WHITE);
+
+        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+            player.setTargetPosition(GetMousePosition());
+        }
+        player.updatePosition();
+        player.draw();
+
         EndDrawing();
     }
     

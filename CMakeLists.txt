@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.0)
+cmake_minimum_required(VERSION 3.10)
 project(AdventureInC)
 set(RAYLIB_PATH_WIN ${CMAKE_SOURCE_DIR}/libs/win/raylib)
 set(RAYLIB_PATH_LINUX ${CMAKE_SOURCE_DIR}/libs/linux/raylib)
@@ -6,6 +6,8 @@ set(RAYLIB_PATH_LINUX ${CMAKE_SOURCE_DIR}/libs/linux/raylib)
 add_executable(${PROJECT_NAME} 
     src/main.cpp
     src/core/logger.cpp
+    src/player/mouseInput.cpp
+    src/player/player.cpp
 )
 
 if(WIN32)

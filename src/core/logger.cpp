@@ -1,6 +1,6 @@
 #include "logger.h"
 #include <iostream>
-
+#include <ctime>
 
 void Logger::log(const std::string& message){
     std::cout << "[" << getTime() << "] " << "[LOG]: " << message << std::endl;  
