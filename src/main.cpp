@@ -31,18 +31,18 @@ int main(int argc, char *argv[]){
     }
     
     nav.loadScene(img);
-    UnloadImage(img);
-
     
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(DARKBLUE);        
 
+        
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
             Vector2 clickPos = input.GetValidPosition(GetMousePosition());
             if (clickPos.x != -1) {
                 std::vector<Vector2> path = nav.findPath(player.getCurrentPosition(), clickPos);
                 if (!path.empty()) {
+                    nav.setCurrentPath(path);
                     player.setPath(path);  // Use new waypoint system
                 }
             }
@@ -51,7 +51,9 @@ int main(int argc, char *argv[]){
         player.updatePosition();
         player.draw();
         
+
         nav.drawDebugGrid();
+        nav.drawDebugPath();
 
         EndDrawing();
     }

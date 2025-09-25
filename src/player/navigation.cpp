@@ -33,6 +33,20 @@ void Navigation::drawDebugGrid() {
     }
 }
 
+void Navigation::setCurrentPath(const std::vector<Vector2>& path) {
+    currentPath = path;
+}
+
+void Navigation::drawDebugPath(){
+    if (currentPath.size() < 2) return;
+    for(int i =0; i < currentPath.size() -1; i++){
+       DrawLine(currentPath[i].x, currentPath[i].y, currentPath[i+1].x, currentPath[i+1].y, MAGENTA);
+    }
+    for (const Vector2& waypoint : currentPath) {
+        DrawCircle(waypoint.x, waypoint.y, 5, GREEN);
+    }
+}
+
 std::vector<Vector2> Navigation::findPath(Vector2 start, Vector2 goal){
     std::vector<Vector2> path;
 
