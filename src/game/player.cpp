@@ -1,4 +1,4 @@
-#include "player.h"
+#include <game/player.h>
 #include <raymath.h>
 
 Player::Player(){

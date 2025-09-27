@@ -1,59 +1,36 @@
 #include <iostream>
-#include <logger.h>
-#include <player.h>
-#include <mouseInput.h>
-#include <navigation.h>
+#include "core/constants.h"
+#include "core/logger.h"
+#include "game/player.h"
+#include "game/mouseInput.h"
+#include "game/navigation.h"
+#include "screens/gameScreen.h"
 #include "raylib.h"
 
 int main(int argc, char *argv[]){
     Logger::info("Starting application");
+
+    Player player;
+    MouseInput input;
+    Navigation nav;
     
-    InitWindow(1920, 1080, "Adventure Test");
+    InitWindow(Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT, Constants::WINDOW_NAME);
     SetTargetFPS(60);
     
     Logger::info("Window initialized");
     
-    Player player;
-    MouseInput input;
-    Navigation nav;
     Image img = LoadImage("assets/data/collision/test-collision.png");
-    if (img.data == NULL) {
-        Logger::error("Failed to load collision image");
-    } else {
-        Logger::info("Collision image loaded successfully");
-    }
-
     Texture2D map = LoadTextureFromImage(img);
-    if (map.id == 0) {
-        Logger::error("Failed to create texture from image");
-    } else {
-        Logger::info("Texture created successfully - ID: " + std::to_string(map.id));
-    }
     
+    GameScreen screen(player, input, nav, map);
     nav.loadScene(img);
     
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(DARKBLUE);        
 
-        
-        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
-            Vector2 clickPos = input.GetValidPosition(GetMousePosition());
-            if (clickPos.x != -1) {
-                std::vector<Vector2> path = nav.findPath(player.getCurrentPosition(), clickPos);
-                if (!path.empty()) {
-                    nav.setCurrentPath(path);
-                    player.setPath(path);  // Use new waypoint system
-                }
-            }
-        }
-        DrawTexture(map, 0, 0, WHITE);
-        player.updatePosition();
-        player.draw();
-        
-
-        nav.drawDebugGrid();
-        nav.drawDebugPath();
+        screen.update();
+        screen.draw();
 
         EndDrawing();
     }

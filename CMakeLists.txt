@@ -6,9 +6,10 @@ set(RAYLIB_PATH_LINUX ${CMAKE_SOURCE_DIR}/libs/linux/raylib)
 add_executable(${PROJECT_NAME} 
     src/main.cpp
     src/core/logger.cpp
-    src/player/mouseInput.cpp
-    src/player/player.cpp
-    src/player/navigation.cpp
+    src/game/mouseInput.cpp
+    src/game/player.cpp
+    src/game/navigation.cpp
+    src/screens/gameScreen.cpp
 )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

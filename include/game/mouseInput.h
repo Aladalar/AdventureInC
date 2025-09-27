@@ -1,3 +1,6 @@
+#ifndef MOUSEINPUT_H
+#define MOUSEINPUT_H
+
 #include "raylib.h" 
 
 class MouseInput{
@@ -16,3 +19,4 @@ class MouseInput{
     private:
 
 };
+#endif;

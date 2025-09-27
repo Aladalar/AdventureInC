@@ -1,4 +1,4 @@
-#include <navigation.h>
+#include <game/navigation.h>
 
 Navigation::Navigation() {
 

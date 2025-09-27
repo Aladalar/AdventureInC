@@ -1,4 +1,4 @@
-#include "mouseInput.h"
+#include <game/mouseInput.h>
 
 MouseInput::MouseInput(){
 }

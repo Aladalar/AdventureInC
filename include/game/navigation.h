@@ -1,3 +1,6 @@
+#ifndef NAVIGATION_H
+#define NAVIGATION_H
+
 #include "raylib.h"
 #include <vector>
 
@@ -23,3 +26,5 @@ class Navigation {
 
 
 };
+
+#endif
