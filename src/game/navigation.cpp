@@ -37,6 +37,10 @@ void Navigation::setCurrentPath(const std::vector<Vector2>& path) {
     currentPath = path;
 }
 
+Image Navigation::getCurrentMap(){
+    return collisionMap;
+}
+
 void Navigation::drawDebugPath(){
     if (currentPath.size() < 2) return;
     for(int i =0; i < currentPath.size() -1; i++){

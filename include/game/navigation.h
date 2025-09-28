@@ -10,8 +10,9 @@ class Navigation {
         Navigation();
         void loadScene(Image newCollisionMap);
         std::vector<Vector2> findPath(Vector2 start, Vector2 goal);
-        void setCurrentPath(const std::vector<Vector2>& path);
         
+        void setCurrentPath(const std::vector<Vector2>& path);
+        Image getCurrentMap();
 
         void drawDebugGrid();
         void drawDebugPath(); 

@@ -22,8 +22,8 @@ int main(int argc, char *argv[]){
     Image img = LoadImage("assets/data/collision/test-collision.png");
     Texture2D map = LoadTextureFromImage(img);
     
+    nav.loadScene(img); 
     GameScreen screen(player, input, nav, map);
-    nav.loadScene(img);
     
     while (!WindowShouldClose()) {
         BeginDrawing();

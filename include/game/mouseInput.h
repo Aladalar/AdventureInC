@@ -8,9 +8,9 @@ class MouseInput{
     public:
         MouseInput();
 
-        Vector2 GetValidPosition(Vector2 mousePosition);
+        Vector2 GetValidPosition(Vector2 mousePosition, Image& map);
 
-        bool isWalkable(Vector2 pos);
+        bool isWalkable(Vector2 pos, Image& map);
 
         void DragObject();
 

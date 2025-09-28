@@ -1,17 +1,16 @@
 #include <game/mouseInput.h>
+#include "raylib.h"
 
 MouseInput::MouseInput(){
 }
 
-Image collisionMap = LoadImage("assets/data/collision/test-collision.png");
-
-Vector2 MouseInput::GetValidPosition(Vector2 mousePosition){
-    if (isWalkable(mousePosition)){
+Vector2 MouseInput::GetValidPosition(Vector2 mousePosition, Image& map){
+    if (isWalkable(mousePosition, map)){
         return mousePosition;
     }
     return {-1,-1};
 }
 
-bool MouseInput::isWalkable(Vector2 pos) {
-    return ColorIsEqual(GetImageColor(collisionMap, pos.x, pos.y), WHITE);
+bool MouseInput::isWalkable(Vector2 pos, Image& map) {
+    return ColorIsEqual(GetImageColor(map, pos.x, pos.y), WHITE);
 }
