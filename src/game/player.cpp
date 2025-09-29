@@ -17,6 +17,10 @@ void Player::setPath(std::vector<Vector2> path){
     }
 };
 
+void Player::spawnPosition(Vector2 spawnPosition){
+    currentPosition = spawnPosition;
+}
+
 void Player::setTargetPosition(Vector2 newPosition){
     if (newPosition.x == -1){
         return;

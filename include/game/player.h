@@ -9,6 +9,7 @@ class Player {
     public:
         Player();
         void setTargetPosition(Vector2 newPosition);
+        void spawnPosition(Vector2 spawnPosition);
         void updatePosition();
         void checkPosition();
         void draw();
@@ -23,7 +24,6 @@ class Player {
         bool isMoving;
         std::vector<Vector2> waypoints;
         int currentWaypointIndex;
-
 
 };
 

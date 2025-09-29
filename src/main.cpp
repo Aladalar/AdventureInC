@@ -10,20 +10,14 @@
 int main(int argc, char *argv[]){
     Logger::info("Starting application");
 
-    Player player;
-    MouseInput input;
-    Navigation nav;
+    GameObject GAME_OBJECT;
     
     InitWindow(Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT, Constants::WINDOW_NAME);
     SetTargetFPS(60);
     
     Logger::info("Window initialized");
-    
-    Image img = LoadImage("assets/data/collision/test-collision.png");
-    Texture2D map = LoadTextureFromImage(img);
-    
-    nav.loadScene(img); 
-    GameScreen screen(player, input, nav, map);
+
+    GameScreen screen(GAME_OBJECT);
     
     while (!WindowShouldClose()) {
         BeginDrawing();

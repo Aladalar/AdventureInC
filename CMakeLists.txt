@@ -6,9 +6,12 @@ set(RAYLIB_PATH_LINUX ${CMAKE_SOURCE_DIR}/libs/linux/raylib)
 add_executable(${PROJECT_NAME} 
     src/main.cpp
     src/core/logger.cpp
+    src/core/gameObject.cpp
     src/game/mouseInput.cpp
     src/game/player.cpp
     src/game/navigation.cpp
+    src/scene/test1Scene.cpp
+    src/scene/test2Scene.cpp
     src/screens/gameScreen.cpp
 )
 
