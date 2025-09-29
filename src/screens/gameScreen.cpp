@@ -21,7 +21,8 @@ void GameScreen::draw() {
         DrawTexture(scene->getBackground(), 0, 0, WHITE);
         gameObject.getPlayer().draw();
         gameObject.getNavigation().drawDebugGrid();
-        // etc.
+        gameObject.getNavigation().drawDebugPath();
+        drawDebugTransitions(scene->getMapTranstitions());
     }
 }
 

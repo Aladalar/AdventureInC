@@ -5,6 +5,7 @@ void Test2Scene::loadScene() {
     playerSpawnPoint = {100, 400};
     
     navMap = LoadImage("assets/data/collision/test-collision-2.png");
+    background = LoadTexture("assets/data/collision/test-collision-2.png");
 
     MapTransition transition;
     transition.position = {100, 400};

@@ -19,18 +19,18 @@ class Scene
             std::string targetScene;
             Vector2 targetSpawnPoint;
         };
-
+        
         // Common getters
         const Image& getNavMap() { return navMap; }
         const Texture2D& getBackground() { return background; }
         const Texture2D& getForeground() { return foreground; }
         Vector2 getSpawnPoint() { return playerSpawnPoint; }
         std::string getName() { return sceneName; }
-
-    protected:
+        std::vector<MapTransition> getMapTranstitions(){return mapChangePoints; }
+        
+        protected:
         std::string sceneName;
         Vector2 playerSpawnPoint;
-
         std::vector<MapTransition> mapChangePoints;
         
         Image navMap;

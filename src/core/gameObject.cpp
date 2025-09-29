@@ -26,6 +26,10 @@ void GameObject::changeScene(const std::string& sceneName){
     //TODO
 };
 
+void GameObject::update(){
+    player.updatePosition();
+}
+
 void GameObject::handleClick(Vector2 clickPos){
 
     Vector2 validPos = input.GetValidPosition(clickPos, currentScene->getNavMap());

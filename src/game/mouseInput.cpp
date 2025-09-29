@@ -1,6 +1,9 @@
 #include "game/mouseInput.h"
 #include "raylib.h"
 
+MouseInput::MouseInput() {
+    // Empty constructor - no initialization needed
+}
 
 Vector2 MouseInput::GetValidPosition(Vector2 mousePosition, const Image& map){
     if (isWalkable(mousePosition, map)){

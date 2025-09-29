@@ -1,10 +1,9 @@
 #include <iostream>
 #include "core/constants.h"
 #include "core/logger.h"
-#include "game/player.h"
-#include "game/mouseInput.h"
-#include "game/navigation.h"
 #include "screens/gameScreen.h"
+#include "scene/test1Scene.h"
+#include "scene/test2Scene.h"
 #include "raylib.h"
 
 int main(int argc, char *argv[]){
@@ -16,6 +15,10 @@ int main(int argc, char *argv[]){
     SetTargetFPS(60);
     
     Logger::info("Window initialized");
+    Test1Scene test;
+    Test2Scene test2;
+
+    GAME_OBJECT.loadScene(&test2);
 
     GameScreen screen(GAME_OBJECT);
     
