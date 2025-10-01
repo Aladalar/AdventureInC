@@ -1,4 +1,5 @@
-﻿#include <screens/gameScreen.h>
+﻿#include "screens/gameScreen.h"
+#include <string>
 
 
 GameScreen::GameScreen(GameObject& gameObject) 
@@ -23,7 +24,11 @@ void GameScreen::draw() {
         gameObject.getNavigation().drawDebugGrid();
         gameObject.getNavigation().drawDebugPath();
         drawDebugTransitions(scene->getMapTranstitions());
+
     }
+    Vector2 mousePos = GetMousePosition();
+    std::string coords = "[" + std::to_string((int)mousePos.x) + ", " + std::to_string((int)mousePos.y) + "]";
+    DrawText(coords.data(), 1700, 1000, 40, WHITE);
 }
 
 void GameScreen::onEnter(){

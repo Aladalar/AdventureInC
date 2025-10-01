@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "core/constants.h"
 #include "core/logger.h"
 #include "screens/gameScreen.h"
@@ -12,6 +13,7 @@ int main(int argc, char *argv[]){
     GameObject GAME_OBJECT;
     
     InitWindow(Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT, Constants::WINDOW_NAME);
+    ToggleFullscreen();
     SetTargetFPS(60);
     
     Logger::info("Window initialized");
@@ -23,6 +25,7 @@ int main(int argc, char *argv[]){
     GameScreen screen(GAME_OBJECT);
     
     while (!WindowShouldClose()) {
+
         BeginDrawing();
         ClearBackground(DARKBLUE);        
 

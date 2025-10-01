@@ -1,4 +1,5 @@
-#include <game/navigation.h>
+#include "game/navigation.h"
+
 
 Navigation::Navigation() {
 
@@ -29,6 +30,7 @@ void Navigation::drawDebugGrid() {
             
             Color dotColor = pathGrid[x][y] ? BLUE : RED; 
             DrawCircle(pixelX, pixelY, 3, dotColor);
+
         }
     }
 }
