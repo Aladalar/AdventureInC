@@ -25,7 +25,7 @@ class Scene
         const Texture2D& getBackground() { return background; }
         const Texture2D& getForeground() { return foreground; }
         Vector2 getSpawnPoint() { return playerSpawnPoint; }
-        std::string getName() { return sceneName; }
+        const std::string& getName() { return sceneName; }
         std::vector<MapTransition> getMapTranstitions(){return mapChangePoints; }
         
         protected:
