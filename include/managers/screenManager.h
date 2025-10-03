@@ -15,13 +15,13 @@ class ScreenManager {
     };
 
     public:
-        ScreenManager();
+        ScreenManager(GameObject& gameObject);
         ~ScreenManager();
 
         // Scene management
         void loadScene(Scene* scene);
         void changeScene(const std::string& sceneName);
-        void changeScreen();
+        void changeScreen(ScreenType type);
         void openMenu();
         void closeMenu();
         void playCinematic();
@@ -32,7 +32,9 @@ class ScreenManager {
         void update();
 
     private:
-        GameObject* gameObject;
+        void loadMaps();
+
+        GameObject& gameObject;
         GameScreen* gameRender;
         Screen* menuRender;
         Screen* cinemaRender;
