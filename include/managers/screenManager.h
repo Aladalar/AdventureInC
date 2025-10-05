@@ -1,11 +1,10 @@
 #ifndef SCREENMANAGER_H
 #define SCREENMANAGER_H
 
-#include "core/gameObject.h"
 #include "screens/screen.h"
 #include "screens/gameScreen.h"
 
-
+class GameObject;
 class ScreenManager {
 
     enum class ScreenType {
@@ -30,6 +29,9 @@ class ScreenManager {
         // Render section
         void draw();
         void update();
+
+        // Getters
+        Scene* getCurrentScene(){return currentScene;};
 
     private:
         void loadMaps();

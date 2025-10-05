@@ -2,35 +2,37 @@
 #include <string>
 #include "core/constants.h"
 #include "core/logger.h"
+#include "core/gameObject.h"
+#include "managers/screenManager.h"
 #include "screens/gameScreen.h"
-#include "scene/test1Scene.h"
-#include "scene/test2Scene.h"
 #include "raylib.h"
 
 int main(int argc, char *argv[]){
     Logger::info("Starting application");
 
     GameObject GAME_OBJECT;
+
     
     InitWindow(Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT, Constants::WINDOW_NAME);
     ToggleFullscreen();
     SetTargetFPS(60);
     
     Logger::info("Window initialized");
-    Test1Scene test;
-    Test2Scene test2;
-
-    GAME_OBJECT.loadScene(&test2);
-
-    GameScreen screen(GAME_OBJECT);
     
+    ScreenManager* SCENE_MANAGER = GAME_OBJECT.getScreenManager();
+    SCENE_MANAGER->changeScene("Test Scene 1");
+
     while (!WindowShouldClose()) {
 
         BeginDrawing();
         ClearBackground(DARKBLUE);        
-
-        screen.update();
-        screen.draw();
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        Vector2 mousePos = GetMousePosition();
+        GAME_OBJECT.handleClick(mousePos);
+    }
+        GAME_OBJECT.update();
+        SCENE_MANAGER->update();
+        SCENE_MANAGER->draw();
 
         EndDrawing();
     }

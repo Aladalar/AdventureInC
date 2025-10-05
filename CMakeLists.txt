@@ -13,6 +13,7 @@ add_executable(${PROJECT_NAME}
     src/scene/test1Scene.cpp
     src/scene/test2Scene.cpp
     src/screens/gameScreen.cpp
+    src/managers/screenManager.cpp
 )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

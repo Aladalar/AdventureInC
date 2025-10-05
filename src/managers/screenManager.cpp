@@ -1,6 +1,8 @@
+#include "core/gameObject.h"
 #include "managers/screenManager.h"
 #include "scene/test1Scene.h"
 #include "scene/test2Scene.h"
+#include "core/logger.h"
 #include <string>
 
 ScreenManager::ScreenManager(GameObject& go): gameObject(go){
@@ -11,7 +13,7 @@ ScreenManager::ScreenManager(GameObject& go): gameObject(go){
 
 
     loadMaps();
-    screenType = ScreenType::CINEMA;
+    screenType = ScreenType::GAME;
     isPaused = false;
 }
 
@@ -31,15 +33,25 @@ void ScreenManager::loadMaps(){
 }
 
 void ScreenManager::changeScene(const std::string& sceneName){
+    Logger::info("Searching for scene: " + sceneName);
     for(Scene* scene : mapList){
+        Logger::info("Checking: " + scene->getName());
         if(scene->getName() == sceneName){
             if(currentScene != nullptr){
                 currentScene->unloadScene();
-            };
+            }
             currentScene = scene;
+            Logger::info("Scene assigned, calling loadScene");
             currentScene->loadScene();
+            Logger::info("Scene loaded successfully");
+             gameObject.getNavigation().loadScene(currentScene->getNavMap());
+            gameObject.getPlayer().spawnPosition(currentScene->getSpawnPoint());
+           
             break;
         }
+    }
+    if(currentScene == nullptr) {
+        Logger::error("Scene not found: " + sceneName);
     }
 }
 
@@ -63,6 +75,18 @@ void ScreenManager::update() {
     } else {
         // Normal game routine
         gameRender->update();
+    }
+}
+
+void ScreenManager::draw() {
+    // Always draw game
+    gameRender->draw();
+    
+    // Draw overlay based on screen type
+    if (screenType == ScreenType::MENU) {
+        menuRender->draw();
+    } else if (screenType == ScreenType::CINEMA) {
+        cinemaRender->draw();
     }
 }
 

@@ -2,9 +2,10 @@
 #define GAMESCREEN_H
 
 #include "screens/screen.h"
-#include "core/gameObject.h"
 #include "raylib.h"
+#include <vector>
 
+class GameObject;
 class GameScreen : public Screen {
 private:
     GameObject& gameObject;

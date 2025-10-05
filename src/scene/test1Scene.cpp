@@ -1,7 +1,10 @@
 #include "scene/test1Scene.h"
 
-void Test1Scene::loadScene() {
+Test1Scene::Test1Scene(){
     sceneName = "Test Scene 1";
+}
+
+void Test1Scene::loadScene() {
     playerSpawnPoint = {100, 400};
     
     navMap = LoadImage("assets/data/collision/test-collision.png");

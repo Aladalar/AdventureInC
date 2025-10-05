@@ -1,4 +1,6 @@
-﻿#include "screens/gameScreen.h"
+﻿#include "core/gameObject.h"
+#include "screens/gameScreen.h"
+#include "managers/screenManager.h"
 #include <string>
 
 
@@ -17,7 +19,7 @@ void GameScreen::update() {
 }
 
 void GameScreen::draw() {
-    Scene* scene = gameObject.getCurrentScene();
+    Scene* scene = gameObject.getScreenManager()->getCurrentScene();
     if (scene != nullptr) {
         DrawTexture(scene->getBackground(), 0, 0, WHITE);
         gameObject.getPlayer().draw();
