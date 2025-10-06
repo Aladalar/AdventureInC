@@ -7,8 +7,8 @@ int main(int argc, char *argv[]){
     Logger::info("Starting application");
     
     InitWindow(1940,1080,"Adventure Game");
-    ToggleFullscreen();
     SetTargetFPS(60);
+    ToggleFullscreen();
     
     Logger::info("Window initialized");
     
