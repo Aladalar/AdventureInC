@@ -1,7 +1,10 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <string>
 #include "raylib.h"
+#include "utilities/logger.h"
+#include "managers/screenManager.h"
 
 class Game{
 
@@ -16,10 +19,16 @@ class Game{
         void quit();
     
     private:
+        // Screen settings
+        Vector2 RESOLUTION = {1940, 1080};
+        const char* WINDOW_NAME = "Adventure Game";
+        int TARGET_FPS = 60;
 
+        // Debug Tools
         bool debugMode = false;
 
-        //TODO: * to Managers;  
+        //TODO: * to Managers;
+        ScreenManager screenManager;  
 };
 
 #endif

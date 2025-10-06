@@ -9,6 +9,7 @@ public:
     static void warn(const std::string& message); 
     static void error(const std::string& message);
     static void info(const std::string& message);
+    static void init(const std::string& message);
 private:
     static std::string getTime();
 };

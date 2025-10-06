@@ -3,8 +3,11 @@ project(AdventureInC)
 set(RAYLIB_PATH_WIN ${CMAKE_SOURCE_DIR}/libs/win/raylib)
 set(RAYLIB_PATH_LINUX ${CMAKE_SOURCE_DIR}/libs/linux/raylib)
 
-add_executable(${PROJECT_NAME} 
+add_executable(${PROJECT_NAME}
     src/main.cpp
+    src/game.cpp
+
+    src/managers/screenManager.cpp
 
     src/utilities/logger.cpp
 )
