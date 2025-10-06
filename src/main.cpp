@@ -25,5 +25,13 @@ int main(int argc, char *argv[]){
     CloseWindow();
     Logger::info("Application closed");
 
+    /*
+    Game game;
+    game.preInit();
+    game.initialize();
+    game.postInit();
+    game.run();
+    return 0;
+    */
     return 0;
 }
