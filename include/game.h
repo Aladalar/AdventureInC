@@ -2,9 +2,12 @@
 #define GAME_H
 
 #include <string>
+#include <map>
 #include "raylib.h"
 #include "utilities/logger.h"
 #include "managers/screenManager.h"
+#include "world/region.h"
+#include "world/scene.h"
 
 class Game{
 
@@ -17,6 +20,10 @@ class Game{
         void postInit();
         void run();
         void quit();
+
+        void loadRegion(Region* region);
+        void unloadRegion(Region* region);
+        void setScene(std::string regionName, std::string sceneName);
     
     private:
         // Screen settings
@@ -29,6 +36,10 @@ class Game{
 
         //TODO: * to Managers;
         ScreenManager screenManager;  
+
+        //Game-Screen var
+        Scene* currentScene;
+        std::map<std::string, Region*> loadedRegions;
 };
 
 #endif

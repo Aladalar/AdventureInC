@@ -1,5 +1,6 @@
 #include "game.h"
-
+#include "world/region.h"
+#include "world/scene.h"
 
 Game::Game(){
 
@@ -8,6 +9,54 @@ Game::Game(){
 Game::~Game(){
 
 }
+
+void Game::loadRegion(Region* region){
+    
+    if (loadedRegions.find(region->getName()) != loadedRegions.end()){
+        return;
+    }
+
+    loadedRegions[region->getName()] = region;
+    region->load();
+}
+
+void Game::unloadRegion(Region* region){
+
+    auto it = loadedRegions.find(region->getName());
+    if (it != loadedRegions.end()) {
+        it->second->unload(); 
+        loadedRegions.erase(it);
+    }
+}
+
+void Game::setScene(std::string regionName, std::string sceneName){
+
+    auto reg = loadedRegions.find(regionName);
+    if ( reg == loadedRegions.end()){
+        Logger::error("Scene " + sceneName + " dont have loaded region " + regionName + " [GAME-SETSCENE]");
+        return;
+    }
+
+    Scene* scene = reg->second->getScene(sceneName);
+
+    if (scene == nullptr){
+        Logger::error("Scene " + sceneName + " doesnt exist in region " + regionName + "[GAME-SETSCENE]");
+        return;
+    }
+    // START ON EXIT ANIMATIONTS ETC
+    currentScene->onLeave();
+
+    // SWAPING SCENE 
+    currentScene = scene;
+    currentScene->onEnter();
+    
+    // CONTINUE RENDER AS USUAL
+    screenManager.setScene(currentScene);
+
+}
+
+
+/* App Init functions*/
 
 void Game::preInit(){
     Logger::info("Starting application");

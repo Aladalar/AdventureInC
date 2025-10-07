@@ -6,7 +6,7 @@
 
 class Scene{
 
-    private:
+    protected:
         std::string name;
         /*
             TODO Animations and other scene specific resources

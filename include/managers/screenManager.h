@@ -9,7 +9,7 @@ public:
     void init();
 
     //Scene render
-    void setScene(/*SceneObject* scene*/);
+    void setScene(Scene* scene);
     void clearScene();
 
     //Common render

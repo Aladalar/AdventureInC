@@ -10,6 +10,14 @@ add_executable(${PROJECT_NAME}
     src/managers/screenManager.cpp
 
     src/utilities/logger.cpp
+
+    src/world/testRegion/testScene.cpp
+
+    src/world/testRegion/scenes/testScene.cpp
+
+    src/world/testRegion/scenes/secondTestScene.cpp
+
+    src/world/testRegion/testRegion.cpp
 )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
