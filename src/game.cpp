@@ -1,6 +1,7 @@
 #include "game.h"
 #include "world/region.h"
 #include "world/scene.h"
+#include "world/testRegion/testRegion.h"
 
 Game::Game(){
 
@@ -43,9 +44,12 @@ void Game::setScene(std::string regionName, std::string sceneName){
         Logger::error("Scene " + sceneName + " doesnt exist in region " + regionName + "[GAME-SETSCENE]");
         return;
     }
-    // START ON EXIT ANIMATIONTS ETC
-    currentScene->onLeave();
-
+    
+    if (currentScene != nullptr){
+        // START ON EXIT ANIMATIONTS ETC
+        currentScene->onLeave();
+    }
+    
     // SWAPING SCENE 
     currentScene = scene;
     currentScene->onEnter();
@@ -78,6 +82,10 @@ void Game::initialize(){
 void Game::postInit(){
     Logger::info("--- POST-INIT START ---");
 
+    Region* tr = new TestRegion();
+    loadRegion(tr);
+    setScene("test-region", "test-scene");
+
     Logger::info("--- POST-INIT END ---");
 }
 
@@ -90,7 +98,8 @@ void Game::run(){
         BeginDrawing();
         ClearBackground(DARKBLUE);        
        
-
+        screenManager.draw();
+        
         EndDrawing();
     }
 }

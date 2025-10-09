@@ -1,14 +1,17 @@
 #ifndef SCREEN_M_H
 #define SCREEN_M_H
 
+#include "world/scene.h"
+
 class ScreenManager
 {
 public:
     ScreenManager();
     ~ScreenManager();
     void init();
+    void update();
 
-    //Scene render
+    //Scene managment
     void setScene(Scene* scene);
     void clearScene();
 
@@ -24,6 +27,8 @@ public:
 
 private:
     void drawBackground();
+    void drawFrontground();
+    void drawItems();
     void drawPawns();
     void drawUI();
     void drawDialogueBox();
@@ -31,6 +36,7 @@ private:
     void drawTransitionOverlay();
     void drawDebugOverlays();
 
+    Scene* activeScene;
 protected:
     /* 
     SceneObject* currentScene;

@@ -3,8 +3,11 @@
 #include "world/testRegion/scenes/secondTestScene.h"
 #include "utilities/logger.h"
 
-void TestRegion::load() {
+TestRegion::TestRegion() {
     name = "test-region";
+}
+
+void TestRegion::load() {
 
     Scene* s1 = new TestScene();
     Scene* s2 = new SecondTestScene();

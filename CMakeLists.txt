@@ -11,12 +11,8 @@ add_executable(${PROJECT_NAME}
 
     src/utilities/logger.cpp
 
-    src/world/testRegion/testScene.cpp
-
     src/world/testRegion/scenes/testScene.cpp
-
     src/world/testRegion/scenes/secondTestScene.cpp
-
     src/world/testRegion/testRegion.cpp
 )
 

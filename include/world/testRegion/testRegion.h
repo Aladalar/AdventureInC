@@ -5,6 +5,7 @@
 
 class TestRegion : public Region{
     public:
+        TestRegion();
         void load() override;
         void unload() override;
         Scene* getScene(std::string name) override;
