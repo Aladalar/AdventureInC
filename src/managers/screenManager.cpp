@@ -49,6 +49,7 @@ void ScreenManager::setScene(Scene* currentScene){
 
 void ScreenManager::drawBackground(){
     
+    Logger::info("Drawing background for: " + activeScene->getName());
     DrawTextureV(activeScene->background, {0,0}, WHITE);
 
 };

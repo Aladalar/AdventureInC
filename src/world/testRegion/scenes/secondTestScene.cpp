@@ -4,8 +4,8 @@
 void SecondTestScene::load(){
     name = "second-test-scene";
 
-    background = LoadTexture("assets/regions/test-region/test-scene/test-collision.png");
-    navMap = LoadImage("assets/regions/test-region/test-scene/test-collision.png");
+    background = LoadTexture("assets/regions/test-region/second-test-scene/test-collision.png");
+    navMap = LoadImage("assets/regions/test-region/second-test-scene/test-collision.png");
 
     if (background.id == 0) {
         Logger::error("Failed to load background for second-test-scene");

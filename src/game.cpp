@@ -94,7 +94,15 @@ void Game::run(){
     Logger::info("--- GAME STARTED ---");
     ToggleFullscreen();
     while (!WindowShouldClose()) {
-
+        
+        if (IsKeyPressed(KEY_ENTER)) {
+            if (currentScene->getName() == "test-scene") {
+                setScene("test-region", "second-test-scene");
+            } else {
+                setScene("test-region", "test-scene");
+            }
+        }
+        
         BeginDrawing();
         ClearBackground(DARKBLUE);        
        
