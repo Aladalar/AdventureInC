@@ -75,6 +75,7 @@ void Game::initialize(){
     Logger::info("--- INIT START ---");
 
     screenManager.init();
+    inputManager.init(this);
 
     Logger::info("--- INIT DONE ---");
 }
@@ -102,6 +103,8 @@ void Game::run(){
                 setScene("test-region", "test-scene");
             }
         }
+
+        inputManager.check();
         
         BeginDrawing();
         ClearBackground(DARKBLUE);        

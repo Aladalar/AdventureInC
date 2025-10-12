@@ -8,6 +8,8 @@ add_executable(${PROJECT_NAME}
     src/game.cpp
 
     src/managers/screenManager.cpp
+    src/managers/inputManager.cpp
+    src/managers/navigationManager.cpp
 
     src/utilities/logger.cpp
 

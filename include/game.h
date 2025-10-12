@@ -6,6 +6,7 @@
 #include "raylib.h"
 #include "utilities/logger.h"
 #include "managers/screenManager.h"
+#include "managers/inputManager.h"
 #include "world/region.h"
 #include "world/scene.h"
 
@@ -24,6 +25,7 @@ class Game{
         void loadRegion(Region* region);
         void unloadRegion(Region* region);
         void setScene(std::string regionName, std::string sceneName);
+        void toggleDebug(){debugMode = !debugMode;};
     
     private:
         // Screen settings
@@ -35,7 +37,8 @@ class Game{
         bool debugMode = false;
 
         //TODO: * to Managers;
-        ScreenManager screenManager;  
+        ScreenManager screenManager;
+        InputManager inputManager;  
 
         //Game-Screen var
         Scene* currentScene;
