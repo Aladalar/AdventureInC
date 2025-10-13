@@ -56,7 +56,13 @@ void Game::setScene(std::string regionName, std::string sceneName){
     
     // CONTINUE RENDER AS USUAL
     screenManager.setScene(currentScene);
+    navigationManager.setScene(&currentScene->navMap);
 
+}
+
+void Game::toggleDebug() {
+    debugMode = !debugMode;
+    Logger::info("Debug mode: " + std::string(debugMode ? "ON" : "OFF"));
 }
 
 
@@ -74,7 +80,7 @@ void Game::preInit(){
 void Game::initialize(){
     Logger::info("--- INIT START ---");
 
-    screenManager.init();
+    screenManager.init(this);
     inputManager.init(this);
 
     Logger::info("--- INIT DONE ---");
@@ -93,7 +99,7 @@ void Game::postInit(){
 void Game::run(){
 
     Logger::info("--- GAME STARTED ---");
-    ToggleFullscreen();
+    //ToggleFullscreen();
     while (!WindowShouldClose()) {
         
         if (IsKeyPressed(KEY_ENTER)) {
@@ -110,7 +116,6 @@ void Game::run(){
         ClearBackground(DARKBLUE);        
        
         screenManager.draw();
-        
         EndDrawing();
     }
 }

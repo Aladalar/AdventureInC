@@ -3,12 +3,14 @@
 
 #include "world/scene.h"
 
+class Game;
+
 class ScreenManager
 {
 public:
     ScreenManager();
     ~ScreenManager();
-    void init();
+    void init(Game* game);
     void update();
 
     //Scene managment
@@ -45,6 +47,7 @@ protected:
     GameObject* gameObject;  
     ...
     */
+    Game* game;
 
     bool debugMode;
     bool menuVisible;

@@ -42,6 +42,11 @@ void InputManager::mouseInput(){
         Logger::info("Mouse right button was clicked");
         return;
     }
+    if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+        Vector2 pos = GetMousePosition();
+        game->getNavigationManager()->findPath({50, 400}, pos);
+        Logger::info("Clicked at: " + std::to_string((int)pos.x) + ", " + std::to_string((int)pos.y));
+    }
 };
 void InputManager::setKeyMacros(){
 

@@ -4,16 +4,20 @@
 #include "raylib.h"
 #include <vector>
 
+class Game;
+
 class NavigationManager {
 public:
     NavigationManager();
     ~NavigationManager();
 
-    void init();
+    void init(Game* game);
     void setScene(Image* newMap);
     
     bool isWalkable(int x, int y);
     std::vector<Vector2> findPath(Vector2 start, Vector2 end);
+
+    void debugDraw();
 
 private:
 
@@ -37,11 +41,13 @@ private:
     PathNode* findLowestFCost(std::vector<PathNode*>& openList);
     GridCell getCell (int x, int y);
     
-    int gridCellSize = 100;
+    int gridCellSize = 25;
     int gridWidth;
     int gridHeight;
     std::vector<GridCell> grid;
+    std::vector<Vector2> currentPath;
     Image* navMap;
+    Game* game;
 };
 
 #endif

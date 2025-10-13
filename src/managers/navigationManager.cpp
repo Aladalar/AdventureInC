@@ -1,5 +1,7 @@
 #include "managers/navigationManager.h"
 #include "utilities/logger.h"
+#include "game.h"
+#include <algorithm>
 
 NavigationManager::NavigationManager() {
     
@@ -10,34 +12,75 @@ NavigationManager::NavigationManager() {
 NavigationManager::~NavigationManager() {
 };
 
-void NavigationManager::init(){
+void NavigationManager::init(Game* g){
+    game = g;
+};
 
+void NavigationManager::setScene(Image* newMap){
+    navMap = newMap;
     grid.clear();
     if(navMap != nullptr){
         buildGrid();
+        Logger::info("=== Grid Built ===");
+        Logger::info("gridWidth: " + std::to_string(gridWidth));
+        Logger::info("gridHeight: " + std::to_string(gridHeight));
+        Logger::info("grid.size(): " + std::to_string(grid.size()));
+        Logger::info("Expected: " + std::to_string(gridWidth * gridHeight));
+        if (grid.size() > 0) {
+            GridCell testCell = grid[16 * gridWidth + 2];
+            Logger::info("Cell[2,16] walkable: " + std::string(testCell.walkable ? "YES" : "NO"));
+        }
     } else {
         Logger::error("Cannot generate mapGrid, becouse map is missing| [NAVIGATION MANAGER]");
     }
-
-};
-void NavigationManager::setScene(Image* newMap){
-    navMap = newMap;
+   
+       
 };
 
 bool NavigationManager::isWalkable(int x, int y){
+    if (x < 0 || x >= navMap->width || y < 0 || y >= navMap->height) {
+        return false;
+    }
     if(GetImageColor(*navMap, x, y).r == 255){
         return true;
     }
     return false;
 };
 
+void NavigationManager::debugDraw(){
+    for(GridCell g : grid){
+        if (g.walkable){
+            DrawCircleV(gridToPixel(g.x, g.y), 5, GREEN);
+        } else {
+            DrawCircleV(gridToPixel(g.x, g.y), 5, RED);
+        }
+
+    }
+    if (!currentPath.empty()) {
+        for (size_t i = 0; i < currentPath.size() - 1; i++) {
+            DrawLineV(currentPath[i], currentPath[i+1], YELLOW);
+        }
+        
+        // Draw waypoints
+        for (Vector2 point : currentPath) {
+            DrawCircleV(point, 8, ORANGE);
+        }
+    }
+}
+
 std::vector<Vector2> NavigationManager::findPath(Vector2 start, Vector2 end){
 
+    currentPath.clear();
     //Converting to Cells 
     int startX, startY, endX, endY;
     pixelToGrid(start.x, start.y, startX, startY);
     pixelToGrid(end.x, end.y, endX, endY);
 
+    Logger::info("Start cell: (" + std::to_string(startX) + "," + std::to_string(startY) + ")");
+    Logger::info("End cell: (" + std::to_string(endX) + "," + std::to_string(endY) + ")");
+    Logger::info("Start walkable: " + std::string(getCell(startX, startY).walkable ? "YES" : "NO"));
+    Logger::info("End walkable: " + std::string(getCell(endX, endY).walkable ? "YES" : "NO"));
+    
     //Declare vectors for cell discovery
     std::vector<PathNode*> openNodes;
     std::vector<PathNode*> closedNodes;
@@ -57,8 +100,10 @@ std::vector<Vector2> NavigationManager::findPath(Vector2 start, Vector2 end){
                 path.push_back(pixel);
                 node = node->parent;   // Move to parent
             }
+            Logger::info("Path found! Length: " + std::to_string(path.size()));
             // Path is backwards (goal→start), reverse it
             std::reverse(path.begin(), path.end());
+            currentPath = path;
             return path;
         }
         
@@ -102,16 +147,18 @@ std::vector<Vector2> NavigationManager::findPath(Vector2 start, Vector2 end){
         }
         openNodes.erase(std::remove(openNodes.begin(), openNodes.end(), current), openNodes.end());
     }
+    Logger::info("No path found from (" + std::to_string(startX) + "," + std::to_string(startY) + ") to (" + std::to_string(endX) + "," + std::to_string(endY) + ")");
+
     return {};
 };
 
 void NavigationManager::buildGrid(){
 
     int w = 0;
-    int h = 0; 
     for(int x = 0; x < GetScreenWidth(); x += gridCellSize){
+        int h = 0; 
         for(int y = 0; y < GetScreenHeight(); y += gridCellSize){
-            if(isWalkable(x,y)){
+            if(isWalkable(x+gridCellSize/2,y+gridCellSize/2)){
                 grid.push_back({w, h, true});
             } else {
                 grid.push_back({w, h, false});

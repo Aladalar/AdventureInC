@@ -1,5 +1,6 @@
 #include "managers/screenManager.h"
 #include "utilities/logger.h"
+#include "game.h"
 
 ScreenManager::ScreenManager(){
 
@@ -13,8 +14,9 @@ ScreenManager::~ScreenManager(){
 
 }
 
-void ScreenManager::init(){
+void ScreenManager::init(Game* g){
 
+    game = g;
     Logger::init("Screen manager initialized");
 }
 
@@ -34,8 +36,16 @@ void ScreenManager::draw(){
     drawPawns();
     drawDialogueBox();
     drawMenu();
-    drawDebug();*/
+    */
+    if (game->getDebugMode()){
+        drawDebug();
+        DrawCircle(50, 400, 10, BLUE);
+    }
 
+}
+
+void ScreenManager::drawDebug(){
+    game->getNavigationManager()->debugDraw();
 }
 
 void ScreenManager::update(){

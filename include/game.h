@@ -7,6 +7,7 @@
 #include "utilities/logger.h"
 #include "managers/screenManager.h"
 #include "managers/inputManager.h"
+#include "managers/navigationManager.h"
 #include "world/region.h"
 #include "world/scene.h"
 
@@ -25,24 +26,29 @@ class Game{
         void loadRegion(Region* region);
         void unloadRegion(Region* region);
         void setScene(std::string regionName, std::string sceneName);
-        void toggleDebug(){debugMode = !debugMode;};
+        void toggleDebug();
+        //Getters
+        NavigationManager* getNavigationManager() { return &navigationManager; };
+        bool getDebugMode(){return debugMode;};
     
     private:
         // Screen settings
-        Vector2 RESOLUTION = {1940, 1080};
+        Vector2 RESOLUTION = {1920, 1080};
         const char* WINDOW_NAME = "Adventure Game";
         int TARGET_FPS = 60;
 
         // Debug Tools
         bool debugMode = false;
 
-        //TODO: * to Managers;
-        ScreenManager screenManager;
-        InputManager inputManager;  
-
         //Game-Screen var
         Scene* currentScene;
         std::map<std::string, Region*> loadedRegions;
+
+    protected:
+        //TODO: * to Managers;
+        ScreenManager screenManager;
+        InputManager inputManager;  
+        NavigationManager navigationManager;
 };
 
 #endif
