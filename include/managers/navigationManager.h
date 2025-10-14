@@ -13,7 +13,7 @@ public:
 
     void init(Game* game);
     void setScene(Image* newMap);
-    
+    void clearPath();
     bool isWalkable(int x, int y);
     std::vector<Vector2> findPath(Vector2 start, Vector2 end);
 
@@ -41,7 +41,7 @@ private:
     PathNode* findLowestFCost(std::vector<PathNode*>& openList);
     GridCell getCell (int x, int y);
     
-    int gridCellSize = 25;
+    int gridCellSize = 50;
     int gridWidth;
     int gridHeight;
     std::vector<GridCell> grid;

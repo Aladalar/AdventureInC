@@ -57,6 +57,7 @@ void Game::setScene(std::string regionName, std::string sceneName){
     // CONTINUE RENDER AS USUAL
     screenManager.setScene(currentScene);
     navigationManager.setScene(&currentScene->navMap);
+    navigationManager.clearPath(); 
 
 }
 

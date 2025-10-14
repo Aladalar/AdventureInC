@@ -2,6 +2,7 @@
 #include "utilities/logger.h"
 #include "game.h"
 #include <algorithm>
+#include <unordered_set>
 
 NavigationManager::NavigationManager() {
     
@@ -69,106 +70,155 @@ void NavigationManager::debugDraw(){
 }
 
 std::vector<Vector2> NavigationManager::findPath(Vector2 start, Vector2 end){
-
+    
+    // ===== 1. DECLARE & INITIALIZE =====
     currentPath.clear();
-    //Converting to Cells 
+    
+    // Convert to grid coordinates
     int startX, startY, endX, endY;
     pixelToGrid(start.x, start.y, startX, startY);
     pixelToGrid(end.x, end.y, endX, endY);
-
-    Logger::info("Start cell: (" + std::to_string(startX) + "," + std::to_string(startY) + ")");
-    Logger::info("End cell: (" + std::to_string(endX) + "," + std::to_string(endY) + ")");
-    Logger::info("Start walkable: " + std::string(getCell(startX, startY).walkable ? "YES" : "NO"));
-    Logger::info("End walkable: " + std::string(getCell(endX, endY).walkable ? "YES" : "NO"));
     
-    //Declare vectors for cell discovery
-    std::vector<PathNode*> openNodes;
-    std::vector<PathNode*> closedNodes;
+    // Validate
+    if(!getCell(startX, startY).walkable || !getCell(endX, endY).walkable){
+        Logger::warn("Start or end not walkable");
+        return {};
+    }
+    
+    // Data structures
+    std::vector<PathNode*> openList;
+    std::unordered_set<int> closedSet;  // Hash: y*gridWidth+x
+    std::unordered_set<int> openSet;
+    
+    // Create start node
     PathNode* startNode = new PathNode{startX, startY, 0, 0, 0, nullptr};
-    openNodes.push_back(startNode);
+    startNode->hCost = calculateHeuristic(startX, startY, endX, endY);
+    startNode->fCost = startNode->gCost + startNode->hCost;
+    openList.push_back(startNode);
+    openSet.insert(startY * gridWidth + startX);
     
-    while (!openNodes.empty())
-    {
-        // GET the best node from openList
-        PathNode* current = findLowestFCost(openNodes);
+    // ===== 2. SEARCH LOOP =====
+    PathNode* goalNode = nullptr;
+    int iterations = 0;
+    const int MAX_ITERATIONS = 10000;
+    
+    while(!openList.empty() && iterations < MAX_ITERATIONS){
+        iterations++;
+        
+        // Get node with lowest fCost
+        PathNode* current = findLowestFCost(openList);
+        
+        // Check if goal
         if(current->x == endX && current->y == endY){
-            // Found goal! Trace back through parents
-            std::vector<Vector2> path;
-            PathNode* node = current;  // Start at goal
-            while(node != nullptr){    // Go until start (parent is nullptr)
-                Vector2 pixel = gridToPixel(node->x, node->y);
-                path.push_back(pixel);
-                node = node->parent;   // Move to parent
-            }
-            Logger::info("Path found! Length: " + std::to_string(path.size()));
-            // Path is backwards (goal→start), reverse it
-            std::reverse(path.begin(), path.end());
-            currentPath = path;
-            return path;
+            goalNode = current;
+            break;
         }
         
-        // Move current to closed list
-        closedNodes.push_back(current);
-        // Remove from open list
-     
-        // 3x3 grid around current, skip center
-        for(int dx = -1; dx <= 1; dx++){
-            for(int dy = -1; dy <= 1; dy++){
-                if(dx == 0 && dy == 0) continue;  // Skip self (center)
-                
-                int nx = current->x + dx;
-                int ny = current->y + dy;
-                
-                // Validate and add to openList
-                if(nx >= 0 && nx < gridWidth && ny >= 0 && ny < gridHeight){
-                    if (getCell(nx, ny).walkable){
-                        bool isValid = true;
-                        for(PathNode* node : closedNodes){
-                            if(node->x == nx && node->y == ny){
-                                isValid = false;
-                                break;
-                            }
+        // Move to closed
+        int currentHash = current->y * gridWidth + current->x;
+        closedSet.insert(currentHash);
+        openSet.erase(currentHash);
+        openList.erase(std::remove(openList.begin(), openList.end(), current), openList.end());
+        
+        // Explore neighbors (4-direction: up, down, left, right)
+        int directions[4][2] = {{0,-1}, {0,1}, {-1,0}, {1,0}};
+        
+        for(int i = 0; i < 4; i++){
+            int nx = current->x + directions[i][0];
+            int ny = current->y + directions[i][1];
+            int neighborHash = ny * gridWidth + nx;
+            
+            // Check bounds
+            if(nx < 0 || nx >= gridWidth || ny < 0 || ny >= gridHeight) continue;
+            
+            // Check walkable
+            if(!getCell(nx, ny).walkable) continue;
+            
+            // Check if in closed
+            if(closedSet.find(neighborHash) != closedSet.end()) continue;
+            
+            // Calculate costs
+            int newGCost = current->gCost + 1;
+            
+            // Check if already in open
+            if(openSet.find(neighborHash) != openSet.end()){
+                // Find existing node and update if better path
+                for(PathNode* node : openList){
+                    if(node->x == nx && node->y == ny){
+                        if(newGCost < node->gCost){
+                            node->gCost = newGCost;
+                            node->fCost = node->gCost + node->hCost;
+                            node->parent = current;
                         }
-                        if(isValid){
-                            PathNode* neighbor = new PathNode{
-                                nx, 
-                                ny,
-                                current->gCost + 1,
-                                calculateHeuristic(nx, ny, endX, endY),
-                                0,
-                                current
-                            };
-                            neighbor->fCost = neighbor->gCost + neighbor->hCost;
-                            openNodes.push_back(neighbor);
-                        }
+                        break;
                     }
                 }
+            } else {
+                // Create new node
+                PathNode* neighbor = new PathNode{
+                    nx, ny,
+                    newGCost,
+                    calculateHeuristic(nx, ny, endX, endY),
+                    0,
+                    current
+                };
+                neighbor->fCost = neighbor->gCost + neighbor->hCost;
+                openList.push_back(neighbor);
+                openSet.insert(neighborHash);
             }
         }
-        openNodes.erase(std::remove(openNodes.begin(), openNodes.end(), current), openNodes.end());
     }
-    Logger::info("No path found from (" + std::to_string(startX) + "," + std::to_string(startY) + ") to (" + std::to_string(endX) + "," + std::to_string(endY) + ")");
-
-    return {};
-};
+    
+    if(iterations >= MAX_ITERATIONS){
+        Logger::warn("Pathfinding timeout!");
+    }
+    
+    // ===== 3. RECONSTRUCT PATH =====
+    std::vector<Vector2> path;
+    
+    if(goalNode != nullptr){
+        PathNode* node = goalNode;
+        while(node != nullptr){
+            Vector2 pixel = gridToPixel(node->x, node->y);
+            path.push_back(pixel);
+            node = node->parent;
+        }
+        std::reverse(path.begin(), path.end());
+        currentPath = path;
+        Logger::info("Path found! Length: " + std::to_string(path.size()));
+    } else {
+        Logger::info("No path found");
+    }
+    
+    // ===== 4. CLEANUP =====
+    for(PathNode* node : openList){
+        delete node;
+    }
+    
+    // Note: closedSet only has hashes, actual nodes are deleted above
+    // goalNode is part of openList, already deleted
+    
+    // ===== 5. RETURN =====
+    return path;
+}
 
 void NavigationManager::buildGrid(){
-
-    int w = 0;
-    for(int x = 0; x < GetScreenWidth(); x += gridCellSize){
-        int h = 0; 
-        for(int y = 0; y < GetScreenHeight(); y += gridCellSize){
-            if(isWalkable(x+gridCellSize/2,y+gridCellSize/2)){
-                grid.push_back({w, h, true});
+    gridWidth = GetScreenWidth() / gridCellSize;
+    gridHeight = GetScreenHeight() / gridCellSize;
+    
+    for(int y = 0; y < gridHeight; y++){
+        for(int x = 0; x < gridWidth; x++){
+            int pixelX = x * gridCellSize + gridCellSize/2;
+            int pixelY = y * gridCellSize + gridCellSize/2;
+            
+            if(isWalkable(pixelX, pixelY)){
+                grid.push_back({x, y, true});
             } else {
-                grid.push_back({w, h, false});
+                grid.push_back({x, y, false});
             }
-            h++;
         }
-        w++;
     }
-
-};
+}
 
 
 // Navigation A* helper methods 
@@ -198,4 +248,8 @@ NavigationManager::PathNode* NavigationManager::findLowestFCost(std::vector<Path
 
 NavigationManager::GridCell NavigationManager::getCell(int x, int y){
     return grid[y * gridWidth + x];    
+}
+
+void NavigationManager::clearPath() {
+    currentPath.clear();
 }
