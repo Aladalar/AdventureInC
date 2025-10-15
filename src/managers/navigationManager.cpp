@@ -22,14 +22,8 @@ void NavigationManager::setScene(Image* newMap){
     grid.clear();
     if(navMap != nullptr){
         buildGrid();
-        Logger::info("=== Grid Built ===");
-        Logger::info("gridWidth: " + std::to_string(gridWidth));
-        Logger::info("gridHeight: " + std::to_string(gridHeight));
-        Logger::info("grid.size(): " + std::to_string(grid.size()));
-        Logger::info("Expected: " + std::to_string(gridWidth * gridHeight));
-        if (grid.size() > 0) {
+          if (grid.size() > 0) {
             GridCell testCell = grid[16 * gridWidth + 2];
-            Logger::info("Cell[2,16] walkable: " + std::string(testCell.walkable ? "YES" : "NO"));
         }
     } else {
         Logger::error("Cannot generate mapGrid, becouse map is missing| [NAVIGATION MANAGER]");
@@ -81,7 +75,6 @@ std::vector<Vector2> NavigationManager::findPath(Vector2 start, Vector2 end){
     
     // Validate
     if(!getCell(startX, startY).walkable || !getCell(endX, endY).walkable){
-        Logger::warn("Start or end not walkable");
         return {};
     }
     
@@ -120,10 +113,12 @@ std::vector<Vector2> NavigationManager::findPath(Vector2 start, Vector2 end){
         openSet.erase(currentHash);
         openList.erase(std::remove(openList.begin(), openList.end(), current), openList.end());
         
-        // Explore neighbors (4-direction: up, down, left, right)
-        int directions[4][2] = {{0,-1}, {0,1}, {-1,0}, {1,0}};
-        
-        for(int i = 0; i < 4; i++){
+        int directions[8][2] = {
+            {0,-1},  {0,1},   {-1,0},  {1,0},     // Cardinal (cost 1)
+            {-1,-1}, {1,-1},  {-1,1},  {1,1}      // Diagonal (cost 1.4)
+        };
+                
+        for(int i = 0; i < 8; i++){
             int nx = current->x + directions[i][0];
             int ny = current->y + directions[i][1];
             int neighborHash = ny * gridWidth + nx;
@@ -133,12 +128,25 @@ std::vector<Vector2> NavigationManager::findPath(Vector2 start, Vector2 end){
             
             // Check walkable
             if(!getCell(nx, ny).walkable) continue;
+
+            // DIAGONAL CHECK: Prevent corner cutting
+            bool isDiagonal = (i >= 4);
+            if(isDiagonal){
+                int dx = directions[i][0];
+                int dy = directions[i][1];
+                // Check both adjacent cells
+                if(!getCell(current->x + dx, current->y).walkable || 
+                !getCell(current->x, current->y + dy).walkable){
+                    continue;  // Can't cut through corner
+                }
+            }
             
             // Check if in closed
             if(closedSet.find(neighborHash) != closedSet.end()) continue;
             
             // Calculate costs
-            int newGCost = current->gCost + 1;
+            int moveCost = isDiagonal ? 14 : 10;
+            int newGCost = current->gCost + moveCost;
             
             // Check if already in open
             if(openSet.find(neighborHash) != openSet.end()){
@@ -185,10 +193,7 @@ std::vector<Vector2> NavigationManager::findPath(Vector2 start, Vector2 end){
         }
         std::reverse(path.begin(), path.end());
         currentPath = path;
-        Logger::info("Path found! Length: " + std::to_string(path.size()));
-    } else {
-        Logger::info("No path found");
-    }
+    } 
     
     // ===== 4. CLEANUP =====
     for(PathNode* node : openList){
